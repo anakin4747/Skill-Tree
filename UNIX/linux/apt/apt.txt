@@ -1,0 +1,92 @@
+Info about apt update
+
+$ sudo apt update
+
+This does not actually install anything.
+Connects to various urls to download a list of available packages.
+Updates package index.
+
+$ sudo apt install htop git tmux .........
+
+To install packages.
+
+--------------------------------------------------------------------------------
+
+$ sudo apt remove htop
+
+To remove packages. Note this will usually not remoce small user config files.
+
+$ sudo apt purge htop
+
+This will remove leftovers on already removed packages. It won't affect any
+data within the home directory.
+
+$ sudo apt autoremove htop
+
+Removes packages that were automatically installed to satisfy dependencies for
+other packages and now are now longer needed.
+Ensure that these packages are not ones you have become accustom to.
+You can ensure this by marking the package with apt-mark.
+
+--------------------------------------------------------------------------------
+
+$ apt search vim
+
+Search looks for available packages. Accepts regex. To find specific files use
+apt-file.
+
+$ apt show vim
+
+Shows IMPORTANT info about packages. Good for understanding the need of
+a package.
+
+--------------------------------------------------------------------------------
+
+$ apt list
+
+Lists all available packages
+
+$ apt list --installed vim
+
+This command shows all packages installed.
+
+$ apt list --all-versions vim
+
+Shows all available versions.
+
+$ apt list --upgradable vim
+
+This command will show the packages that can be upgraded.
+
+--------------------------------------------------------------------------------
+
+list vs search
+
+list uses glob patterns to find the status of the packages you know the name of
+while search uses regex to find packages you don't know the name of.
+
+--------------------------------------------------------------------------------
+
+$ sudo apt upgrade
+
+Actually downloads available upgrades that were listed by apt update.
+
+$ sudo apt dist-upgrade
+
+Does a similar thing to upgrade but removes but upgrade wont install additional
+packages or remove additional packages.
+
+$ sudo apt full-upgrade 
+
+Will upgrade but will remove installed packages if needed to upgrade.
+
+--------------------------------------------------------------------------------
+
+It is good practice to run these 3 commands in order:
+
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt dist-upgrade
+
+--------------------------------------------------------------------------------
+

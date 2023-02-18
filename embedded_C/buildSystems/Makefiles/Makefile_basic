@@ -1,0 +1,20 @@
+CC = gcc
+INCDIRS = -I.
+OPT = -O0
+CFLAGS = -Wall -Wextra -g $(INCDIRS) $(OPT)
+
+CFILES = main.c resetArrayDeck.c shuffleArray.c dealArray.c
+OBJECTS = main.o resetArrayDeck.o shuffleArray.o dealArray.o
+
+BINARY = bin
+
+all: $(BINARY)
+
+$(BINARY): $(OBJECTS)
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $^
+
+clean:
+	rm -rf $(BINARY) $(OBJECTS)

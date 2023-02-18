@@ -1,0 +1,3 @@
+The /boot directory contains all required configurations and files for booting.
+
+The system kernel must be either here or in / (root).

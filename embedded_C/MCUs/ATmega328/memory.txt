@@ -1,0 +1,42 @@
+There are 2 forms of memory
+
+Reference Section 7 of the ATmega328 datasheet
+
+Flash memory
+    Your program lives here
+    Contains 32Kbytes on chip reprogrammable flash memory
+    Instructions are 16 or 32 bits wide so flash is organized as 16K x 16
+
+    Flash memory can be further divided into the boot flash section and the
+    application flash section
+    The application section starts as 0x0000 and the boot section ends at 0x3FFF
+
+RAM memory
+    Where all your temporary stuff lives like your variables
+
+    Data Memory Layout
+    
+    +-------------------+
+    |    32 General     | Starts at 0x0000 = 0
+    | Purpose Registers |   Ends at 0x001F = 31
+    +-------------------+
+    | 64 IO Registers   | Starts at 0x0020 = 32
+    +-------------------+   Ends at 0x005F = 95
+    |   160 External    | Starts at 0x0060 = 96
+    |   I/O Registers   |   Ends at 0x00FF = 255
+    +-------------------+
+    |   Internal SRAM   | Starts at 0x0100 = 256
+    |                   |
+    |                   |
+    |     1048 x 8      |
+    |                   |
+    |                   |   Ends at 0x08FF = 2303
+    +-------------------+
+
+    So if you were to initialize a variable like:
+    
+        int i = 69;     // Nice
+        int *p = &i;    // *p == 0x0100
+
+    The address of that variable would be at the beginning of internal SRAM.
+        

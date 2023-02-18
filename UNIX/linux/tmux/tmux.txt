@@ -1,0 +1,11 @@
+Commands
+
+$ tmux
+
+    This command enables tmux
+
+$ tmux attach
+
+    This command attaches to the last terminal in case it crashed or closed
+
+$ 

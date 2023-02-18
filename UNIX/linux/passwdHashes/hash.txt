@@ -1,0 +1,31 @@
+Hashes in depth
+
+Example Hash:
+
+    $6$KHBKjvhjlbKBJDLN.....$JBHFkdbskOIHOkjbBKjbKJBKJ....
+
+Note that this may not be an accurate hash as I just keymashed to simulate one.
+
+The first field is the Hash type. This specifies the algorith used to create
+the hash. Below are some common Hash types.
+
+    $1$ - MD5
+    $2a$ - Blowfish
+    $2y$ - Blowfish
+    $5$ - SHA-256
+    $6$ - SHA-512   - This is the default in red-hat enterprise linux
+
+The second field is the Salt. Is a bit of extra protect to make the hash
+stronger. The salt gets added to the password in the hashing function to make
+the hash unique. So if 2 users had the same password, without salt they would
+have the same hash, but salt makes the hashes different. Prevents attacks such
+as rainbow table. Its an attack that has several hashes already computed and
+just compares that to get the password. With the salt this is no longer
+possible to do. The salt is always randomly generated.
+
+The last field is the actual hash.
+
+Also something worth noting is that if you run the command usermod --lock to
+lock a user out of their account, an ! is added at the beginning of the whole
+hash. usermod --unlock just removes the !. The ! renders the hash unusable and
+therefor preventing the user from logging in.

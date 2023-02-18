@@ -1,0 +1,138 @@
+####################################################################
+# This is a standard makefile that accounts for dependancies
+####################################################################
+
+# Makefiles can have variables 
+# They are specified by several assignment operators
+# This file only uses the = assignment operator
+
+# Below are all the variables used in this make file
+
+BINARY = bin
+# Name of binary output file
+
+CODEDIRS = . lib
+# Directories of source code
+
+INCDIRS = . ./include/  # Can be a list
+# Included Directories
+
+CC = gcc
+# Compiler
+
+OPT = -O0
+# Optimization code for compiling
+
+DEPFLAGS = -MP -MD
+# Dependancy flags
+# These are used so that the compiler will
+# provide make with indications of dependancies
+# 	-MP adds a phony target (as in a makefile target)
+#		this is a workaround for make errors
+#	-MD has the preprocessor return a discription of
+#		the dependancies to make
+
+CFLAGS = -Wall -Wextra -g $(foreach D, $(INCDIRS), -I$(D)) $(OPT) $(DEPFLAGS)
+# Compiler flags
+# The flags beign used are:
+# 	-Wall, which enables all Warnings
+# 	-Wextra, which enables extra warnings
+#	-g, for debugging information
+#	a foreach loop, which adds every directory in INCDIRS with a -I flag before it
+#	the optimization flag specified by OPT
+#	the dependancy flags specified by DEPFLAGS
+
+CFILES = $(foreach D, $(CODEDIRS), $(wildcard $(D)/*.c))
+# C files to compile
+# This automatically finds all C files in directories
+# specified by CODEDIRS
+# This line uses a for loop with the index D to iterate
+# through CODEDIRS to find any files ending in .c using
+# the wildcard/* combo
+
+OBJECTS = $(patsubst %.c, %.o, $(CFILES))
+# Generate a list of object files from the list of CFILES
+# This is done by using the patsubst function from make 
+# and creating an object file for every C file
+# % acts as a wild card
+DEPFILES = $(patsubst %.c, %.d, $(CFILES))
+# Generate a list of dependancy files which end with .d
+# same as above but with .d instead of .o 
+
+# This is the end of defining the varibles
+
+
+
+
+# Below we get into the commands the Makefile will run
+#
+# The format for commands are as follows:
+#
+# target: pre-requesites
+# 		command
+# 		command
+#
+# The commands must be indented with a tab to prevent
+# make syntax errors
+#
+# The target needs the pre-requesites to be built before
+# it can be built. Make will run the first target in a 
+# makefile and anytime it does not have the pre-req for
+# the target, it will continue searching the makefile for
+# commands that build the pre-req. This is how makefiles
+# only compile code which has been updated and prevents
+# overhead associated with unnecessary recompiling of 
+# unmodified code.
+# If a file has not been touched it will not get 
+# recompiled by the makefile
+
+
+all: $(BINARY)
+# The standard target "all" is run first when calling make
+# "all" is made from the list $(BINARY)
+# So it will look below to find the matching pre-requesite
+# If nothing in $(BINARY) has changed then it wont run anything
+
+$(BINARY): $(OBJECTS)
+	$(CC) -o $@ $^
+# To build the target $(BINARY) the associated object in
+# $(OBJECTS) must also be built, if it is not it will look
+# below for instructions on building the object
+	# The indented text below it must be indented with a tab
+	# This is the command that will build $(BINARY) from the
+	# list of pre-requesite $(OBJECTS)
+	# The command uses the specified compiler, $(CC) to compile
+	# the objects
+	# this is a bash command after the variables have been exchanged
+	# an example of this output would be:
+	# gcc -o binary_file obj1.o obj2.o obj3.o
+	# the $@ expands to the target, $(BINARY), while the $^ expands
+	# to the list of pre-requesites, $(OBJECTS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+# This command will run for all objects that need to be built
+# This command compiles the matching .c file for every .o file
+	# The $(CFLAGS) are the flags specified above
+	# The -c flag specifies that it will make an object file
+	# The -o flag saves the .o file in the target, $@
+	# The first pre-requesite, $<, will be passed to the compilation
+	
+clean:
+	rm -rf $(BINARY) $(OBJECTS) $(DEPFILES)
+# A target called clean is usually added so that you can clean up
+# A lot of files can be generated from a makefile so this is a 
+# useful utility
+# clean has no pre-requesites because it doesnt depend on anything
+	# The command will recursively remove the binary, the objects
+	# and the dependancy files
+	
+distribute: clean
+	tar zcvf dist.tgz *
+
+diff:
+	$(info The status of the repository, and the volume of per-file changes:)
+	@git status
+	@git diff --stat
+
+-include $(DEPFILES)

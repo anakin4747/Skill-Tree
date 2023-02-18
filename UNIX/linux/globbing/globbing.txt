@@ -1,0 +1,41 @@
+Globbing
+
+Global patterns that specifies sets of filenames with wildcard characters.
+
+Its just using * and ? to describe target files.
+
+like 
+
+$ rm *.txt
+
+The * wildcard will mean anything. So this will remove anything ending with
+.txt.
+
+and
+
+$ rm file?.txt
+
+The ? wildcard will mean any single character. So this will remove file1.txt
+but not file11.txt.
+
+You can also use some regex patterns like []. But regex and file globbing are
+completely different. Globbing is just for filenames. Regex are just patterns
+in text. There is a lot more syntax in regex.
+
+$ rm [bc]at.txt
+
+This will remove the files bat.txt and cat.txt but not rat.txt.
+
+$ rm [2-9][a-c].txt
+
+You can also specify ranges by using a - inside the []. This will remove files
+like 3b.txt or 9a.txt but not 3d.txt or 1a.txt. The range is only for the
+single character.
+
+$ rm [!2-9].txt
+
+You can also use ! to negate a match. So this will work for 1.txt and 0.txt
+only.
+
+
+

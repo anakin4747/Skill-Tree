@@ -1,0 +1,21 @@
+To install wpa_supplicant you need to run
+
+    $ apt-get install wpasupplicant
+
+You likely wont need to install it as it should be already downloaded on linux
+systems
+
+Note that there is no underscore in the package you would install
+
+In the location /etc/network/interfaces.d/ there are files matching each
+network connection which lists the settings of that interface.
+
+Note that on ubuntu there is no interfaces.d but instead 4 configuration
+directory files:
+
+    if-down.d
+    if-post-down.d
+    if-pre-up.d
+    if-up.d
+
+On the raspberry pi there is an interfaces.d configuration directory

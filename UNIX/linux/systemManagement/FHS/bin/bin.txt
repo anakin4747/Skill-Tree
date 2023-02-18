@@ -1,0 +1,3 @@
+/bin contains executable binary files that are used by users for common tasks.
+The binaries here facilitate minimal functionality for booting and system
+repairs.

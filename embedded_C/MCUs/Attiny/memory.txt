@@ -1,0 +1,39 @@
+There are 2 forms of memory
+
+Reference Section 5 of the ATtiny85 datasheet
+
+Flash memory
+    Your program lives here
+    Contains 8Kbytes on chip reprogrammable flash memory
+    Instructions are 16 or 32 bits wide so flash is organized as 4096 x 16
+
+    There is no separation of boot and application sections in flash memory
+    Flash starts at 0x0000 to 0x0FFF
+
+RAM memory
+    Where all your temporary stuff lives like your variables
+
+    Data Memory Layout
+    
+    +-------------------+
+    |    32 General     | Starts at 0x0000 = 0
+    | Purpose Registers |   Ends at 0x001F = 31
+    +-------------------+
+    | 64 IO Registers   | Starts at 0x0020 = 32
+    +-------------------+   Ends at 0x005F = 95
+    |                   | Starts at 0x0060 = 96
+    |   Internal SRAM   | 
+    |                   |
+    |                   |
+    |     512 x 8       |
+    |                   |
+    |                   |   Ends at 0x025F = 607
+    +-------------------+
+
+    So if you were to initialize a variable like:
+    
+        int i = 69;     // Nice
+        int *p = &i;    // *p == 0x0100
+
+    The address of that variable would be at the beginning of internal SRAM.
+

@@ -1,0 +1,79 @@
+Process for interacting with bluetoothctl/bluetoothd
+
+You can check the status of bluetoothd by running:
+  $ systemctl status bluetooth
+
+If it is not enabled, enable the daemon by runnin:
+  $ sudo systemctl enable bluetooth
+  $ sudo systemctl restart bluetooth
+
+  Or
+  $ sudo systemctl re-enable bluetooth
+
+Reminder that enable means the service will start on boot.
+While start will simply start the service.
+To just start bluetoothd run:
+  $ sudo systemctl start bluetooth
+
+
+To connect with a wireless device like a speaker or headphones
+
+  1. Run the command $ bluetoothctl
+    
+    A prompt will show up that looks like:
+      [bluetooth]# 
+    
+    Above the prompt it might display devices you have connected with.
+
+  2. Then power on the bluetooth controller
+  
+    [bluetooth]# power on
+
+    The output should say: Changing power on succeeded
+
+  3. Then scan for the device
+    
+    [bluetooth]# scan on
+
+  4. Find your device in the list of available devices then trust the device
+
+    [bluetooth]# trust 84:AD:8D:46:3B:94
+    Changing 84:AD:8D:46:3B:94 trust succeeded
+    
+  5. Connect to your device 
+
+    [bluetooth]# connect 84:AD:8D:46:3B:94
+    Attempting to connect to 84:AD:8D:46:3B:94
+    Connection successful
+    [device_name]#
+
+    You should now be connected
+
+-------------------------------------------------
+
+
+Trouble Shooting 
+
+  Error Messages:
+    [bluetooth]# power on
+    Failed to set power on: org.bluez.Error.Busy
+
+      I ran into this error by opening the bluetooth GUI menu while also
+      in the bluetoothctl CLI interactive mode
+    
+    Solution
+      $ rfkill block bluetooth 
+      This disables the device called bluetooth
+      $ rfkill unblock bluetooth
+      This enables bluetooth
+
+    [bluetooth]# trust 84:AD:8D:46:3B:94
+    Device 84:AD:8D:46:3B:94 not available
+
+      Or
+
+    [bluetooth]# connect 84:AD:8D:46:3B:94
+    Device 84:AD:8D:46:3B:94 not available
+
+    Solution
+      Ensure your devices is in discovery mode and have a little patience.

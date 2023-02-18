@@ -1,0 +1,123 @@
+This is a list of all the exercises from K&R's The C Programming Language that
+I have either completed or attempted.
+
+Exercises and Examples
+
+Chapter 1
+	Hello world
+1-1 **** - Too easy
+1-2 **** - Too easy
+	F-C_converter_example.c
+1-3 Done
+1-4 Done
+	F-C table with for loop.c
+1-5 Done - Fahreinheit converter
+	copy input to output.c
+	copy_input_to_output_2nd_ver.c
+1-6 **** - Too Easy
+1-7 Done - Too Easy - Print value of EOF
+	char_counter_while.c
+	char_counter_for.c
+	line_counting.c
+1-8 Done - Count ' ', '\t', and '\n'
+1-9 Done - Truncate strings of spaces
+1-10 Done - Replace escape chars for their chars - Lacks some functionality
+	Word_Counting.c
+1-11 **** - Unnecessary - How would you test Word_Counting.c
+1-12 Done - Print one word per line
+	Counting digit frequency.c
+1-13 Done - Print histogram of word length
+1-14 Done - Print histogram of char frequency
+1-15 Done - Rewrite F-C converter using a function
+	longest_string.c
+1-16 **** - Confusing, What is an arbitrarily long line
+1-17 Done - Print lines longer than 80 chars
+1-18 Done - Remove trailing whitespace
+1-19 Done - Reverse input 1 line at a time
+	longest_string_extern.c
+1-20 Done - Replace tabs with spaces
+1-21 Done - Replace strings of blanks with tabs
+1-22 Done - Fold long input lines - Lacks some functionality
+1-23 Done - Remove comments from a file
+1-24 **** - Error checking of c files - Lacks some functionality
+
+Chapter 2
+2-1 **** - Dont really want to do - Write a program to print ranges of data types
+2-2 Done - Make a multi condition for loop into nested if statements
+	atoi_example.c
+	rand_example.c
+2-3 Done - htoi(), string in hex to integer value
+	squeeze_example.c
+	strcat_example.c
+2-4 Done - squeeze() but for all chars in second string
+2-5 Done - Return the index of the first matching char in 2 strings
+	getbits_example.c
+2-6 Done - setbits n in x, at position p, from y
+2-7 Done - invert n range of bits in x, at position p
+2-8 **** - Come back to this - rotate all bits right - depends on wordsize
+	bit_count_example.c
+2-9 Done - Faster bit counter
+2-10 Done - convert to lower case using ? operator
+
+Chapter 3
+	binsearch_example.c
+3-1 **** - Binary search with one less if() test
+	Counting digit frequency using a switch()
+3-2 Done - Convert from chars to escape chars and back - Dont know how to test functionality
+	atoi_example.c
+	shell_sort_example.c
+	reverse_w_comma_operator_example.c
+3-3 Done - expand "a-e" to "abcde" - missing some functionality
+	itoa_example.c
+3-4 Done - itoa example to account for largest value
+3-5 **** - Come back to when you have access to you htoi function
+3-6 Done - itoa with minimum string width
+	trim_example.c
+
+Chapter 4
+	grep_example.c
+4-1 Done - Return the index of the rightmost occurence of a char in a string
+	atof_example.c - wont compile with main() from textbook
+4-2 Done - atof with sci notation functionality
+	polish_calculator_example_main.c
+4-3 Done - polish calculator with modulo and negative numbers
+4-4 Done - calc with peak(), copy, swap, and clear
+4-5 Done - Added sin, exp, and pow
+4-6 Done - Added variables
+4-7 Done - Added ungets()
+4-8 Done - ungetch now only allows one char
+4-9 **** - Handle EOF pushback correctly
+4-10 **** - Use getline()
+4-11 **** - Confused about how it would use an internal buffer that would oboslete only ungetch and not getch
+	recursive_printd.c
+4-12 Done - Recursive itoa function
+4-13 **** - Recursive string reverse
+4-14 Done - Macro defined swap function
+
+
+Chapter 5
+	getint_example.c
+5-1 - Done - getint with +-
+5-2 - Done - getfloat
+	strlen_example.c
+	alloc_example.c
+	strlen_example_2.c
+	strcpy_example.c
+	strcmp_example.c
+5-3 - Done - strcat
+5-4 - Done - strend
+5-5 - Done - strncpy, strncat, and strncmp
+5-6.1 - Done - Redo getline with pointers
+5-6.2 - Done - Redo atoi with pointers
+5-6.3 - **** - itoa with pointers
+5-6.4 - **** - reverse with pointers
+5-6.5 - Done - strindex with pointers
+5-6.6 - **** - getop with pointers
+	sort_ptrs_2_ptrs.c
+5-7 - Done on work computer - Rewrite Readlines without malloc
+    day_month_year_conversions.c
+5-8 - Done on work computer - Add error checking to day_month_year_conversions.c
+    month_name.c
+5-9 - Done - Rewrite day_month_year_conversions.c with pointers
+    echo.c
+    find.c

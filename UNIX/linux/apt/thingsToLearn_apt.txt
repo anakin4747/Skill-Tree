@@ -1,0 +1,6 @@
+apt satisfy
+    What does it do?
+    What are dependency strings?
+    What are Build-Depends?
+    What conflicts does it handle?
+

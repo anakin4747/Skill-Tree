@@ -1,0 +1,39 @@
+To understand where apt looks for packages we will look into the list of
+sources
+
+The list of sources can be found in /etc/apt/sources.list
+
+Below we see a portion of the file, # indicate comments 
+
+....
+
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb http://ca.archive.ubuntu.com/ubuntu/ jammy main restricted
+# deb-src http://ca.archive.ubuntu.com/ubuntu/ jammy main restricted
+
+....
+
+The uncommented portions follow the format of:
+
+typeOfPackages repoURL distroReleaseCodeName repoType
+
+So in my sources.list I have:
+
+deb - for the type of package
+    deb-src is also common and are source files compared to compiled deb files
+
+http://ca.archive.ubuntu.com/ubuntu/ - for the repo's URL
+
+jammy - for the distro's release code name
+    jammy is for jammy jellyfish
+    Other common ones are xenial, bionic, and focal for ubuntu
+        or buster or sid for debian
+
+main and restricted - for the types of repo's that apt will reference
+    Some other options are universal and multiverse
+
+--------------------------------------------------------------------------------
+
+Typically its not safe to edit the file yourself it is best to use the command
+add-apt-repository. Which will keep you from breaking apt.

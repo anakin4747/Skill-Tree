@@ -1,0 +1,25 @@
+To securely change passwords within a script
+
+Use the chpasswd -e command. The -e flag means you will be passing in a hashed
+password. This prevents you from having cleartext passwords in your scripts.
+
+Example:
+
+$ python3
+
+>>> import crypt; print(crypt.crypt('Colorado'))
+$6$h0jd.smcwHgRsbPB$TEYd8Rzlzlm1YoLtsCy6Zohwvg9QsxKFVDjsMSLEM67kAq0yL4Aw.JYE0BgJG0paxpwZablWtZZOApxvBj3dr.
+>>>^D
+
+$ echo
+'userID:$6$h0jd.smcwHgRsbPB$TEYd8Rzlzlm1YoLtsCy6Zohwvg9QsxKFVDjsMSLEM67kAq0yL4Aw.JYE0BgJG0paxpwZablWtZZOApxvBj3dr.'
+| chpasswd -e
+
+Thats all supposed to be 1 line.
+
+But what that does is: first you generate a hash using python3 then exit
+python3. Then you echo the targets user id and the hash separated by a : and
+pipe the text into chpasswd -e.
+
+Sudo will likely be required if you are not root.
+

@@ -1,0 +1,20 @@
+IEEE802.1 Bridging - LAN/MAN bridging and management.
+                     Covers management and the lower sub-layers of OSI layer
+                     2, including MAC based briding virtual LANs and port-based
+                     access control
+
+IEEE802.3 Ethernet - Provides asynchronous networking using CSMA/CD
+                     Carrier sense multiple access with collision detect.
+                     Over coax, twisted-pair copper, and optical fiber media.
+                     Current speeds range from 10 Mbps to 10 Gbps.
+
+IEEE802.11 Wifi - Wireless LAN Media Access Control 
+                  Layers 1(Physical) & 2(MAC address)
+
+IEEE802.15 Wireless PAN - Bluetooth, UWB, ZigBee, Mesh Networks
+                          UWB electronics are hard to make but secure
+                          Zigbee - collect info from multiple sensors
+                          1 hop to transmit. Adopted by Hydro companies.
+                          Mesh Networks spreads network without increasing 
+                          power. Good application for agriulture. Improved
+                          version of ZigBee.

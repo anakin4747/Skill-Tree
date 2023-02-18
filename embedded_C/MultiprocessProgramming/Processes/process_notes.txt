@@ -1,0 +1,247 @@
+Notes for programming processes in UNIX systems
+
+Making multiple processes is useful for having multiple things happen 
+simutaniously. 
+
+Forks
+    You must #include <unistd.h> to use fork() and other functions.
+
+    fork(); copies the current process and starts a new process.
+            All data that was defined before the fork() call gets 
+            copied to the new process.
+            All data that is defined after the fork() call gets
+            ran by both processes simutaniously.
+
+    fork() returns an int in the form pid_t. This represents the process ID.
+    In the main process this value will the PID of the child process. 
+    In the child process this value will be 0.
+
+    If the fork() call failed the return value will be -1.
+    It is good practice to check if fork() failed as so:
+
+        int pid = fork();
+        if(pid < 0){    // if(pid == -1) can also work
+            return 2;
+        }
+
+    To access only the child process use an if statement that 
+    checks to see if the PID of the process is 0.
+        
+        int pid = fork();
+        if(pid == 0){
+            //child process
+            //pid == 0
+        }
+        //main process
+        //pid == child's process ID#
+    
+    If you fork multiples times be careful of each new process you are creating.
+    For example:
+
+        fork();    // 1 process calls another process = 2 processes
+        fork();    // 2 processes call another process = 4 processes
+        fork();    // 4 processes call another process = 8 processes
+
+    The number of processes you make can be calculated by 2^n with n being 
+    the number of fork calls your program makes.
+
+Waiting
+    You must #include <sys/wait.h> to use wait() and other functions.
+
+    wait(NULL); halts execution of its process until a child process of the
+                current process finishes its execution. This will only wait 
+                for one child to finish then continue to execute.
+    
+    The parameter passed to the function is an status/error code you can save 
+    if you pass in an address to save it to. If you pass in NULL it does not 
+    save the status code.
+    
+    If you have multiple child processes make sure to include the correct number
+    of wait(NULL); statements to wait for all of them.
+
+    If you do not wait for a child process and the main process finishes first
+    the child process becomes a zombie process when it finishes. This means that
+    the OS wasnt able to properly clean up data related to the child process 
+    and their entries remain in the process table, taking up needless space.
+
+    Always wait for your children to finish before finishing execution.
+
+    The return value of the wait(NULL); call will be the PID of the child process
+    it waited for or it will return -1 if it there are no children to wait for. 
+
+    A failsafe to make sure you arent creating any zombies is the following line;
+
+        while(wait(NULL) != -1 || errno != ECHILD);
+    
+    This will loop over endlessly until either condition is true. The left condition
+    being if wait(NULL) returns a PID then there could still be children. But if it 
+    returns -1 it means there are no children to wait for thus breaking the while 
+    loop. The right condition being the last error number (errno) is not a no child
+    processes error (ECHILD). To use errno and ECHILD you must add #include <errno.h>.
+
+    waitpid();                                                                                  -COME BACK TO THIS
+
+Piping
+    You must #include <unistd.h> to use pipe() and other functions.
+
+    Pipes are used to send data between processes. They are unidirectional. To use 
+    pipes you have to create an int array of 2 file descriptors which represent the
+    reading (0) and writing (1) ends of the pipe. Then pass the array to the pipe()
+    function to declare the pipe as so:
+
+        int fd[2];
+        pipe(fd);
+        ...
+        fork();
+
+    pipe() will return 0 is successful and -1 if it failed. It is good practice To
+    error check your pipe calls so that you know if it was unsuccessful. This is 
+    done the same fork() calls as so:
+
+        if(pipe(fd) == -1){        or     if(pipe(fd) < 0) {
+            return 1;                         return 1;
+        }                                 }
+    
+    Since pipes are unidirectional, 2 pipes are required for 2-way communication
+    between 2 processes. 
+
+    It is also important to note that since the 2 file descriptors are defined 
+    before forking, both processes have a copy of the file descriptors. This 
+    means that there would be 4 file descriptors which you have to acount for 
+    after a single fork. 
+
+    Writing to Pipes
+
+        To write data to a pipe you have to use the write(); function.
+
+                close(fd[0]);                   // close reading end of pipe
+                int x = 6;                                           
+                write(fd[1], &x, sizeof(int));  // write to writing end of pipe
+                close(fd[1]);                   // close writing end of pipe
+
+        The write function takes 3 arguments. The first is the pipe which you are writing
+        to, the writing end of the pipe is always 1, in this case fd[1]. The second argument
+        is the location (address) of the variable you want to write to the pipe. In this
+        case we write the value at address &x, which is 6, to the pipe. The last argument
+        is the size of the variable we are sending through the pipe. The code starts with 
+        closing the reading end since this process doesnt read from the pipe. Once you are
+        done writing to a pipe it is good practice to close the pipe.
+
+        The write() function returns a -1 if it fails which can be checked in the same 
+        manner as pipe() and fork().
+
+    Reading from Pipes
+
+        To read data from a pipe it is the same process as writing only you save a variable 
+        into the second argument.
+
+                close(fd[1]);                   // close writing end of pipe
+                int y;                                           
+                read(fd[0], &y, sizeof(int));   // read from reading end of pipe
+                close(fd[0]);                   // close reading end of pipe      
+
+        For the sake of an example lets say this code is from a process that reads from the 
+        previous example of writing to a pipe. This means that after the 3rd line the value 
+        of y would now be 6. Note that the first argument is now fd[0] which is the reading
+        end of the pipe. Again be mindful to close all file descriptors if you arent using
+        them or if you are done with them. 
+
+        The read() function returns a -1 if it fails which can be checked in the same 
+        manner as write(), pipe() and fork().
+
+        Since this example only has 1 pipe with 2 ends, these processes can only send data
+        one way.
+
+    2 Way Communication with Pipes
+
+        If you need to have 2 way communication between processes, you cannot use a single
+        pipe. If you have 2 processes that both read and write to the pipe you cannot 
+        guarantee that one process wont read and write the data before the other has a chance
+        to process it. For this reason we need 1 pipe for either direction of sending data.
+        
+            int p1[2];      // Writes to parent from child, reads info from child in parent
+            int p2[2];      // Writes to child from parent, reads info from parent in child
+        
+        For every direction you want to send data you need a pipe. This goes for processes
+        with multiple children. 
+
+FIFOs (Named Pipes)
+
+    Pipes are used for related processes, which means that the pipe is between a parent and 
+    child or child and child of the same parent, but they cannot communicate between other
+    non-related processes. 
+
+    Thats where FIFOs become useful. They are also called named pipes as they are just pipes
+    which can be saved as files and be accessed by multiple non-related processes.
+
+    To use FIFOs you must #include <sys/stat.h>, #include <fcntl.h>, and #include <sys/types.h>. 
+    You can also #include <errno.h> if you wish to handle errors.
+
+    To make FIFOs you have to use the function mkfifo(), as shown below:
+
+        mkfifo("myfifo1", 0777);
+
+    This function will make a FIFO with the title of the first argument, in this case "myfifo1",
+    with the permissions specified in the second argument (0777). The FIFO will be generated
+    in the current working directory.
+
+    mkfifo() returns a -1 if it fails which can be checked in the same manner as the previous
+    functions. If a file with the name "myfifo1" already exists the mkfifo() call will fail
+    and return -1. In the situation where the file already exists, the "errno" variable is set
+    to EEXIST. You can check for this error if you want to handle this in a specific way.
+
+        if(mkfifo("myfifo1", 0777) == -1){ // Make fifo and error check
+            if(errno != EEXIST){           // If it already exists continue
+                return 1;                  // Error code
+            }
+        }
+        ... more code ...       
+   
+    The above example demonstrates how you would correctly handle errors of mkfifo() if you
+    intended to do the same action whether or not the file was created, as long as the file 
+    exists. First the if statement sees if mkfifo returned an error and then it checks if 
+    that error is because it already exists. This code will ensure the file "mkfifo1" exists.
+
+    Before working with FIFO files you must first open them.
+
+        open("myfifo1", O_WRONLY);
+
+    The above line of code opens a FIFO with the name "myfifo1" with the open flag O_WRONLY.
+    This flag is the writing only flag. Other possible access mode flags are O_RDONLY and 
+    O_RDWR for reading and both reading and writing respectively. There are also a lot of 
+    other flags which can be combined with the access mode flags. These flags can either 
+    be file creation flags or file status flags. Dont focus on all the possible flags for 
+    now as I believe open() is used for many more applications than just FIFOs.
+
+    The open() function returns the value of the file descriptor for writing to the FIFO
+    since it was opened in writing only mode. There would be 2 file descriptors if it was
+    opened in reading and writing mode. You can save the file descriptor as so:
+
+        int fd = open("myfifo1", O_WRONLY);
+        
+    The open() call can also return a -1 in the case it fails. You can check for this error
+    as seen below:
+
+        int fd = open("fifo_name", O_WRONLY);   // open file
+        if(fd == -1){                           // check if open returned -1
+            return 1;                           // return an error code
+        }
+
+    Opening an end of a FIFO blocks the process until the other end is also opened. This 
+    means that your process will hang at the open() call until another process opens it.
+    This can be another related process, such as a child process, or it can be any other
+    process that opens the file.
+
+    Writing to FIFOs
+
+        Use write() to write to the FIFO in the same fashion as you would for pipes.
+
+    Reading from FIFOs
+
+        Use read() to read from the FIFO in the same fashion as you would for pipes. The
+        value you would read will be the ASCII value of what was wrote.                         -COME BACK TO THIS
+
+    Closing FIFOs
+
+        Make sure to close FIFOs once you have wrote to or read from them. Just like all 
+        the pipes. 

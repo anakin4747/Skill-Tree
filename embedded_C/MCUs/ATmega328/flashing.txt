@@ -1,0 +1,10 @@
+Flashing Code to ATmega328
+
+To write code to the MCU you first have to clear the application flash section
+and re-write your application code to it.
+
+The boot flash section is where the boot loader lives.
+
+Section 26
+
+
