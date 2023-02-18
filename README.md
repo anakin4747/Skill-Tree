@@ -6,9 +6,6 @@ what skills I have learnt and some skills I want to learn.
 I have organized the skill tree so that I can show off some skills that would
 be valuable to the embedded RTOS and Network Engineering domains.
 
-Folders which are hidden (start with a ".") are concepts or skills I have yet
-to learn but hope to learn soon.
-
 Folders which are visible either have sample code or text documents with some
 comments of my knowledge in those areas.
 
